@@ -25,6 +25,7 @@ docker-compose up -d
 ```
 
 ### 2. Créer et activer l'environnement virtuel
+
 ```bash
 python -m venv venv
 venv\Scripts\activate
@@ -71,4 +72,8 @@ Configurez les variables d'environnement dans un fichier `.env` si nécessaire.
 ## Développement
 
 Pour les modifications du code, le serveur se relance automatiquement avec le flag `--reload`.
-<img src="https://github.com/Amdjar-Abdelwahid/DocQA-MS-Clinical-Document-QA-Assistant-LLM-Microservices-/issues/1#issue-3677089805" >
+<img width="1920" height="1200" alt="Capture d&#39;écran 2025-11-29 212010" src="https://github.com/user-attachments/assets/a82fdac2-78ce-4622-a27a-a18135d1efb4" />
+<img width="1008" height="496" alt="Capture d&#39;écran 2025-11-29 213209" src="https://github.com/user-attachments/assets/e858dc58-4aa5-4e5d-ab45-bb6ceea356c2" />
+<img width="1920" height="1200" alt="Capture d&#39;écran 2025-11-29 213136" src="https://github.com/user-attachments/assets/cdfc6ecf-2a9d-4e23-bdb2-0c99d3707cb9" />
+<img width="1920" height="1200" alt="Capture d&#39;écran 2025-11-29 211913" src="https://github.com/user-attachments/assets/660c3217-e29f-4f7b-a193-7067fb16452c" />
+
