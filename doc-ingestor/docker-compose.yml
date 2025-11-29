@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  # 1. Base de données pour suivre les documents
+  postgres_ingest:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpassword
+      POSTGRES_DB: ingestion_db
+    ports:
+      - "5433:5432"
+
+  # 2. File d'attente pour envoyer le texte au service suivant
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"   # Port communication
+      - "15672:15672" # Interface web (login: guest/guest)
+
+  # 3. Serveur Tika (Le moteur d'extraction de texte)
+  tika:
+    image: apache/tika:latest
+    ports:
+      - "9998:9998"
+
+  # 4. Notre application Python (Optionnel pour le moment, on va la lancer en local pour tester)
