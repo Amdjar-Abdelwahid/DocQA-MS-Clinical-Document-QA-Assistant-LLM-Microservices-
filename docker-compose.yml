@@ -1,0 +1,15 @@
+  synthese-comparative:
+    build:
+      context: ./synthese-comparative
+    container_name: synthese-comparative
+    ports:
+      - "8005:8005"
+    environment:
+      # Pour passer en mode "vrai"
+      USE_FAKE_RETRIEVAL: "false"
+      USE_FAKE_LLM: "false"
+      SEMANTIC_INDEXER_URL: "http://semantic-indexer:8003"
+      LLM_QA_URL: "http://llm-qa:8004"
+    depends_on:
+      - semantic-indexer
+      - llm-qa
