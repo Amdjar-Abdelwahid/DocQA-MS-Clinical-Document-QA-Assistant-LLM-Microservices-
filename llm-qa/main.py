@@ -63,9 +63,10 @@ except Exception as e:
 
 # --- CHANGEMENT MAJEUR ICI ---
 # On utilise Ollama (Mistral) qui tourne sur votre PC
-print("3. Connexion au LLM Local (Ollama)...")
-llm = ChatOllama(model="mistral", temperature=0)
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 
+print(f"3. Connexion au LLM Local (Ollama) sur {OLLAMA_BASE_URL}...")
+llm = ChatOllama(model="mistral", base_url=OLLAMA_BASE_URL, temperature=0)
 # Le Prompt (Consignes données à l'IA)
 template = """
 Tu es un assistant médical expert.

@@ -1,9 +1,10 @@
 import pika
 import json
 from tika import parser
+import os
 
 # Configuration RabbitMQ
-RABBITMQ_HOST = 'localhost'
+RABBITMQ_HOST = os.getenv('RABBITMQ_HOST', 'localhost')
 QUEUE_NAME = 'raw_documents_queue'
 
 def extract_text_from_file(file_path: str):
