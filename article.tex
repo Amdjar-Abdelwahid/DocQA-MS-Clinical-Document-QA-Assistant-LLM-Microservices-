@@ -1,0 +1,193 @@
+%% 
+%% Project: DocQA-MS Clinical Document QA Assistant (MTC Edition)
+%% Authors: Benlaktib Yassine, El absi Mohamed Anoir, Amdjar Abdelwahid, Naim Moahmed, Ziad Othmane
+%% 
+
+\documentclass[preprint,12pt, a4paper]{elsarticle}
+
+\usepackage{geometry}
+\geometry{
+    a4paper,
+    left=2cm,
+    right=2cm,
+    top=1.5cm,
+    bottom=3cm
+}
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Configure code highlighting
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green!60!black},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=5pt,
+    backgroundcolor=\color{gray!10},
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    frame=single,
+    rulecolor=\color{black},
+    tabsize=4,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false,
+    escapeinside={\%*}{*)},
+    morekeywords={async, await, def, class, return, import, from}
+}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{framed}
+\usepackage{enumitem}
+\usepackage{pdfpages}
+\usepackage{hyperref}
+\usepackage{tablefootnote} 
+\usepackage{amssymb}
+\usepackage{subfig}
+\usepackage{multicol}
+\setlength{\parindent}{0pt}
+
+
+\journal{Journal of Healthcare Informatics}
+
+\begin{document}
+\renewcommand{\labelenumii}{\arabic{enumi}.\arabic{enumii}}
+
+\begin{frontmatter} 
+\title{DocQA-MS: A Privacy-Preserving Clinical Assistant with Retrieval-Augmented MTC Formulation}
+
+% Updated Authors List
+\author[label1]{Benlaktib Yassine}
+\author[label1]{El absi Mohamed Anoir}
+\author[label1]{Amdjar Abdelwahid}
+\author[label1]{Naim Moahmed}
+\author[label1]{Ziad Othmane}
+
+\address[label1]{Moroccan School of Engineering Sciences (EMSI), Marrakesh, Morocco}
+
+\begin{abstract}
+The digitization of healthcare records offers immense potential for personalized medicine, particularly in integrating Traditional Chinese Medicine (MTC) with modern clinical decision support. \textit{DocQA-MS} is a microservices-based Clinical Question-Answering assistant designed to process medical documents while strictly preserving privacy through local execution. A key innovation of this platform is the integration of a **Retrieval-Augmented Generation (RAG) MTC module**. We utilized a structured **MTC knowledge base** to generate precise herbal formulas. By analyzing patient specifications via a locally deployed LLM (Ollama/Mistral), the system employs a **Contextual Scoring Strategy** to prioritize plants (Emperor, Minister roles) and ensure safety. This hybrid approach combines the semantic flexibility of Large Language Models with structured algorithmic decision-making to deliver accurate, safe, and personalized treatment suggestions without external data exposure.
+\end{abstract}
+
+\begin{keyword}
+Clinical QA \sep Microservices \sep RAG \sep Local LLM \sep Traditional Chinese Medicine \sep Patient Safety \sep Herbal Formulation
+\end{keyword}
+
+\end{frontmatter}
+
+%\linenumbers
+
+\section*{Metadata}
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|l|p{7.5cm}|p{7.5cm}|}
+\hline
+\textbf{Nr.} & \textbf{Code metadata description} & \textbf{Metadata} \\
+\hline
+C1 & Current code version & v1.0 \\
+\hline
+C2 & Permanent link to code/repository & \url{https://github.com/amdjar-abdelwahid/docqa-ms} \\
+\hline
+C3  & Permanent link to Reproducible Capsule & N/A\\
+\hline
+C4 & Legal Code License & MIT License \\
+\hline
+C5 & Code versioning system used & Git\\
+\hline
+C6 & Software code languages & Python, FastAPI, Streamlit, LangChain, SQL\\
+\hline
+C7 & Key Dependencies & Docker, Ollama (Mistral), RabbitMQ, PostgreSQL, FAISS, LangChain\\
+\hline
+C8 & Developer Documentation & See README.md \\
+\hline
+\end{tabular}
+\label{codeMetadata} 
+\end{table}
+
+\section{Motivation and significance}
+
+Modern healthcare often overlooks the structured integration of Traditional Chinese Medicine (MTC) due to the complexity of its pharmacopoeia and the risk of interactions (toxication) \cite{wang2021integrating}. Physicians require tools that can not only summarize clinical history but also cross-reference it with vast botanical databases to suggest safe treatments.
+
+\textit{DocQA-MS} addresses this by combining a privacy-first LLM architecture with a specialized **MTC Formulation RAG Pipeline**. The significance of this work lies in its dual approach:
+\begin{enumerate}
+    \item **Privacy \& Sovereignty:** Using local LLMs (Ollama running Mistral) and containerized microservices to ensure patient data never leaves the premise \cite{jiang2023mistral}, \cite{ollama2024}.
+    \item **Hybrid Intelligence:** Unlike generic chatbots, our system uses a **Retrieval-Augmented Generation (RAG)** approach \cite{lewis2020retrieval} grounded in a curated MTC dataset. It generates formulas based on strict patient specifications (symptoms, constitution) and enforces safety via prompt-driven verification.
+\end{enumerate}
+
+\section{Software Description}
+
+\subsection{Architecture Overview}
+The system relies on a hybrid microservices architecture involving both Dockerized and local components:
+\begin{itemize}
+    \item \textbf{Ingestion (Doc-Ingestor):} A Python service using Apache Tika to parse and anonymize patient documents.
+    \item \textbf{Semantic Indexer:} Utilizes FAISS \cite{johnson2019billion} and HuggingFace embeddings (\texttt{all-MiniLM-L6-v2}) to vectorize medical context and the MTC knowledge base.
+    \item \textbf{LLM QA (Ollama Integration):} The core cognitive engine. It connects to a local Ollama instance running Mistral 7B to perform reasoning without internet access.
+    \item \textbf{MTC Knowledge Base:} A structured dataset (CSV) containing standardized data on Syndromes, Formulas, and Plants, including role scores (Empereur, Ministre, etc.).
+\end{itemize}
+
+\subsection{The MTC Formulation RAG Pipeline}
+
+A core contribution of this project is the adaptation of RAG for structured decision making in MTC.
+
+\begin{enumerate}
+    \item \textbf{Data Structuring:} 
+    A comprehensive database was constructed structuring MTC knowledge into relational entities. This allows the system to query precise "Gold Standard" treatment protocols.
+    
+    \item \textbf{The Ranking Logic (In-Context Learning):}
+    Instead of a rigid rule-based algorithm, we employ **In-Context Learning** via LangChain \cite{langchain2024}. We inject the plant metadata directly into the LLM's context window. The Prompt Template enforces a hierarchical formulation logic:
+    \begin{itemize}
+        \item \textbf{Emperor (Jun) - Score 10:} The principal herb treating the main cause.
+        \item \textbf{Minister (Chen) - Score 7:} Enhances the action of the Emperor.
+        \item \textbf{Assistant (Zuo) - Score 4:} Treats accompanying symptoms or reduces toxicity.
+        \item \textbf{Envoy (Shi) - Score 2:} Harmonizes the formula.
+    \end{itemize}
+
+    \item \textbf{Generation Workflow:}
+    \begin{enumerate}
+        \item \textbf{Retrieval:} The system retrieves the most relevant MTC entries (Syndromes/Plants) using semantic similarity searches on the FAISS index.
+        \item \textbf{Augmentation:} These retrieved structured records (with their scores) are injected into the Prompt Template.
+        \item \textbf{Reasoning:} The Local LLM (Mistral) acts as the reasoning engine to assemble the final formula, ensuring that plants with high "Toxication" risks are excluded based on the patient's specific contraindications found in their clinical notes.
+    \end{enumerate}
+\end{enumerate}
+
+\section{Illustrative Example}
+
+\textbf{Scenario:} A patient note mentions "chronic fatigue, spontaneous sweating, and aversion to cold".
+
+\begin{enumerate}
+    \item \textbf{Processing:} The \textit{Semantic Indexer} vectorizes the symptoms.
+    \item \textbf{Retrieval:} The system queries the Knowledge Base and retrieves Entry \#3 \textit{"Vide de Qi (Qi Deficiency)"} which links to the formula \textit{Yu Ping Feng San}.
+    \item \textbf{Context Injection:}
+    \begin{lstlisting}[language=Python, caption=Prompt Context Example]
+    CONTEXT:
+    - Syndrome: Vide de Qi
+    - Plant: Astragalus membranaceus (Score: 10, Role: Empereur)
+    - Plant: Atractylodes macrocephala (Score: 7, Role: Ministre)
+    - Contraindication: None for this patient.
+    \end{lstlisting}
+    \item \textbf{Formulation Output:} 
+    "Based on the analysis of 'Vide de Qi', I recommend the \textbf{Yu Ping Feng San} modification.
+    \begin{itemize}
+        \item \textbf{Emperor:} Astragalus (30g) - Score 10. Strengthens Wei Qi and consolidates the surface.
+        \item \textbf{Minister:} Atractylodes (10g) - Score 7. Tonifies Spleen Qi.
+    \end{itemize}
+    This formula is safe as the patient shows no signs of Excess Heat (toxication risk handled)."
+\end{enumerate}
+
+\section{Conclusion}
+
+\textit{DocQA-MS} demonstrates that blending modern NLP with structured traditional knowledge is both feasible and beneficial. By leveraging a local RAG architecture, we enable the automatic generation of safe, rated, and specification-based herbal formulas, providing a powerful and privacy-preserving tool for integrative medicine practitioners.
+
+\bibliography{bibliography}
+\bibliographystyle{elsarticle-num}
+
+\end{document}
